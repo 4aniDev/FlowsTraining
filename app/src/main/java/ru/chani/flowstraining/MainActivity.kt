@@ -3,10 +3,8 @@ package ru.chani.flowstraining
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,26 +14,21 @@ class MainActivity : AppCompatActivity() {
         flowTraining()
     }
 
-    fun flowTraining() {
-        val flow: Flow<Int> = flowOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-
-        flow
-            .filter { it % 2 == 0 }
-            .map { it * 100 }
-
-
+    private fun flowTraining() {
         GlobalScope.launch {
-            flow.collect {
-                Log.d("TAG_MAIN", it.toString())
+            printHelloWorldWithProgress().collect { progress ->
+                Log.d("TAG_MAIN", progress.toString())
             }
         }
-
-        MainScope().launch {
-            flow
-                .filter { it == 6 }
-                .collect {
-                    Log.d("TAG_MAIN", it.toString())
-                }
-        }
     }
+
+    private fun printHelloWorldWithProgress(): Flow<Int> = flow<Int> {
+        var progress = 0
+        while (progress < 100) {
+            progress++
+            delay(40)
+            emit(progress)
+        }
+        Log.d("TAG_MAIN", "HELLO WORLD!")
+    }.flowOn(Dispatchers.IO)
 }
