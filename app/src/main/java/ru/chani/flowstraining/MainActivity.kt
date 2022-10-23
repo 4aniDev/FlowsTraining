@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -20,9 +17,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun flowTraining() {
-        val list = arrayListOf<Int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-
-        val flow = list.asFlow()
+        val flow: Flow<Int> = flowOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
         flow
             .filter { it % 2 == 0 }
